@@ -1,0 +1,150 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, Link } from 'react-router-dom'; // useParams to get ID from URL
+import { mockTradespeople } from '../data/mockTradespeopleData'; // Assuming this data is rich enough
+import './TradespersonProfilePage.css';
+
+// Re-using or adapting StarRating from TradespersonCard
+const StarRating = ({ rating }) => {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5; // Basic half-star logic
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+  return (
+    <div className="star-rating-profile">
+      {'★'.repeat(fullStars)}
+      {/* In a real app, use proper half/empty star icons */}
+      {halfStar && '☆'}
+      {'☆'.repeat(emptyStars)}
+      <span style={{ marginLeft: '8px' }}>{rating} ({/* Add review count here if available */})</span>
+    </div>
+  );
+};
+
+function TradespersonProfilePage() {
+  const { tradespersonId } = useParams(); // Get the ID from the URL
+  const [tradesperson, setTradesperson] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate fetching data for the specific tradesperson
+    const foundTradesperson = mockTradespeople.find(tp => tp.id === tradespersonId);
+    if (foundTradesperson) {
+      // Add more details to the foundTradesperson if your mock data needs it for profile page
+      // For now, we assume mockTradespeopleData has enough, or we add more fields here
+      const detailedProfile = {
+        ...foundTradesperson,
+        about: `Welcome to ${foundTradesperson.name}! We are dedicated ${foundTradesperson.trade}s serving the ${foundTradesperson.locationSnippet} area with over ${Math.floor(Math.random() * 10) + 5} years of experience. We pride ourselves on quality workmanship and excellent customer service. All our team members are fully qualified and insured for your peace of mind.`,
+        servicesOffered: ['Service A for ' + foundTradesperson.trade, 'Service B for ' + foundTradesperson.trade, 'Emergency Callouts', ...foundTradesperson.skills],
+        // Mock portfolio images if not in main data
+        portfolio: foundTradesperson.portfolioImages || [
+          { id: 1, url: 'https://via.placeholder.com/300x200/007bff/FFFFFF?Text=Work+Example+1', caption: 'Completed boiler installation' },
+          { id: 2, url: 'https://via.placeholder.com/300x200/28a745/FFFFFF?Text=Work+Example+2', caption: 'Bathroom tap replacement' },
+          { id: 3, url: 'https://via.placeholder.com/300x200/ffc107/000000?Text=Work+Example+3', caption: 'Garden fence repair' },
+        ],
+        // Mock reviews if not in main data
+        reviews: [
+          { id: 1, reviewer: 'Jane D.', date: '15 May 2025', rating: 5, comment: `Excellent work from ${foundTradesperson.name}! Very professional and tidy.` },
+          { id: 2, reviewer: 'Mike L.', date: '10 May 2025', rating: 4, comment: 'Good job, reasonably priced. Would recommend.' },
+        ]
+      };
+      setTradesperson(detailedProfile);
+    }
+    setLoading(false);
+  }, [tradespersonId]);
+
+  if (loading) {
+    return <div className="profile-page-container loading-container"><div className="loader"></div><p>Loading tradesperson profile...</p></div>;
+  }
+
+  if (!tradesperson) {
+    return (
+      <div className="profile-page-container error-container">
+        <h2>Tradesperson Not Found</h2>
+        <p>Sorry, we couldn't find a profile for the requested tradesperson.</p>
+        <Link to="/search-results">Back to Search Results</Link>
+      </div>
+    );
+  }
+
+  return (
+    <div className="profile-page-container">
+      <header className="profile-header">
+        <img src={tradesperson.profileImage || 'https://via.placeholder.com/120'} alt={tradesperson.name} className="profile-main-image" />
+        <div className="profile-header-info">
+          <h1>{tradesperson.name}</h1>
+          <p className="profile-trade-type">{tradesperson.trade} in {tradesperson.locationSnippet}</p>
+          {tradesperson.rating && <StarRating rating={tradesperson.rating} />}
+          <div className="profile-actions">
+            <button className="action-button primary-action">Request Quote</button>
+            <button className="action-button secondary-action">Send Message</button>
+          </div>
+        </div>
+      </header>
+
+      <nav className="profile-nav">
+        {/* Basic navigation tabs - functionality to switch views can be added later */}
+        <button className="nav-tab active">About</button>
+        <button className="nav-tab">Skills & Vetting</button>
+        <button className="nav-tab">Portfolio</button>
+        <button className="nav-tab">Reviews ({tradesperson.reviews.length})</button>
+      </nav>
+
+      <main className="profile-content">
+        <section id="about" className="profile-section">
+          <h2>About {tradesperson.name}</h2>
+          <p>{tradesperson.about}</p>
+          <h3>Services Offered:</h3>
+          <ul>
+            {tradesperson.servicesOffered.map((service, index) => <li key={index}>{service}</li>)}
+          </ul>
+        </section>
+
+        <section id="skills-vetting" className="profile-section">
+          <h2>Skills & Vetting Status</h2>
+          <p><strong>Primary Skills:</strong> {tradesperson.skills.join(', ')}</p>
+          <div className="vetting-details">
+            <h3>SkillCo Verification:</h3>
+            <p className="vetting-item success">
+              <span className="vetting-icon">✔️</span> {tradesperson.vettingStatus}
+              {/* Example of more granular AI verification display */}
+              {tradesperson.id === '1' && <span className="vetting-sub-detail">(AI Keyword Match: Gas Safe ID confirmed)</span>}
+              {tradesperson.id === '2' && <span className="vetting-sub-detail">(AI Document Scan: NICEIC & PLI details extracted)</span>}
+            </p>
+            {/* Add more mocked vetting items if needed, e.g., */}
+            {/* <p className="vetting-item pending"><span className="vetting-icon">⏳</span> Identity Check: Verified (Manual)</p> */}
+            {/* <p className="vetting-item info"><span className="vetting-icon">ℹ️</span> Portfolio Review: In Progress</p> */}
+            <p className="vetting-disclaimer"><em>SkillCo's vetting process includes AI-assisted checks and manual reviews. Status shown is for prototype demonstration.</em></p>
+          </div>
+        </section>
+
+        <section id="portfolio" className="profile-section">
+          <h2>Work Portfolio</h2>
+          <div className="portfolio-gallery">
+            {tradesperson.portfolio.map(item => (
+              <div key={item.id} className="portfolio-item">
+                <img src={item.url} alt={item.caption} />
+                <p>{item.caption}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section id="reviews" className="profile-section">
+          <h2>Homeowner Reviews ({tradesperson.reviews.length})</h2>
+          {tradesperson.reviews.map(review => (
+            <div key={review.id} className="review-item">
+              <StarRating rating={review.rating} />
+              <p className="review-comment">"{review.comment}"</p>
+              <p className="review-meta">- {review.reviewer}, {review.date}</p>
+            </div>
+          ))}
+        </section>
+      </main>
+
+      <div className="back-to-search">
+        <Link to="/search-results">← Back to Search Results</Link>
+      </div>
+    </div>
+  );
+}
+
+export default TradespersonProfilePage;

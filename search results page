@@ -1,0 +1,65 @@
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom'; // To potentially get postcode from previous page
+import TradespersonCard from '../components/TradespersonCard';
+import { mockTradespeople } from '../data/mockTradespeopleData';
+import './SearchResultsPage.css'; // Or your preferred styling
+
+function SearchResultsPage() {
+  const [tradespeople, setTradespeople] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const location = useLocation(); // Can be used to get passed state e.g. postcode
+
+  // Simulate fetching data
+  useEffect(() => {
+    // In a real app, you'd fetch based on postcode from location.state
+    // For now, just simulate a delay and use mock data
+    const timer = setTimeout(() => {
+      setTradespeople(mockTradespeople);
+      setLoading(false);
+    }, 1500); // Simulate network delay
+    return () => clearTimeout(timer);
+  }, []);
+
+  // const homeownerPostcode = location.state?.postcode || "your area"; // Example
+
+  if (loading) {
+    return (
+      <div className="search-results-container loading-container">
+        <h2>Searching for skilled tradespeople near Leicester...</h2> {/* Use actual postcode later */}
+        {/* Add a loading spinner animation here */}
+        <div className="loader"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="search-results-container">
+      <header className="results-header">
+        <h1>Tradespeople Near You in Leicester</h1> {/* Dynamically update with actual postcode */}
+        <p>Displaying {tradespeople.length} available professionals.</p>
+        {/* Conceptual Filters - Non-functional for now */}
+        <div className="filters-container">
+          <select><option>Trade Type (All)</option><option>Plumber</option><option>Electrician</option></select>
+          <select><option>Availability (Any)</option><option>Available Now</option><option>Available Today</option></select>
+        </div>
+      </header>
+
+      {/* Conceptual Map Placeholder */}
+      <div className="map-placeholder">
+        <p>[Interactive Map of Leicester showing tradespeople locations would appear here - Mocked for now]</p>
+        {/* You could embed a static image of a map for visual effect */}
+        <img src="https://via.placeholder.com/800x300/EEEEEE/AAAAAA?Text=Leicester+Map+View+(Conceptual)" alt="Map of Leicester" style={{width: '100%', height: 'auto'}}/>
+      </div>
+
+      <div className="tradespeople-list">
+        {tradespeople.length > 0 ? (
+          tradespeople.map(tp => <TradespersonCard key={tp.id} tradesperson={tp} />)
+        ) : (
+          <p>No tradespeople found matching your criteria in Leicester. Try adjusting your search.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default SearchResultsPage;

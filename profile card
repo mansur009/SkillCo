@@ -1,0 +1,66 @@
+import React from 'react';
+import './TradespersonCard.css'; // Or your preferred styling
+// import { useNavigate } from 'react-router-dom'; // For later navigation to full profile
+
+// Placeholder for star icons - you can replace with actual icons later
+const StarRating = ({ rating }) => {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+  return (
+    <div className="star-rating">
+      {'★'.repeat(fullStars)}
+      {halfStar && '☆' /* Replace with half star icon */}
+      {'☆'.repeat(emptyStars)} {/* Replace with empty star icon */}
+      <span style={{marginLeft: '5px'}}>({rating})</span>
+    </div>
+  );
+};
+
+
+function TradespersonCard({ tradesperson }) {
+  // const navigate = useNavigate(); // For later
+
+  // const viewProfile = () => {
+  //   navigate(`/tradesperson/${tradesperson.id}`); // Example route
+  // };
+
+  return (
+    <div className="tradesperson-card">
+      <div className="card-header">
+        <img src={tradesperson.profileImage || 'https://via.placeholder.com/80'} alt={tradesperson.name} className="profile-image" />
+        <div className="header-info">
+          <h3>{tradesperson.name}</h3>
+          <p className="trade-type">{tradesperson.trade}</p>
+          {tradesperson.rating && <StarRating rating={tradesperson.rating} />}
+          <p className="review-count">({tradesperson.reviewCount || 0} reviews)</p>
+        </div>
+      </div>
+      <div className="card-body">
+        <p className="location-distance">📍 {tradesperson.locationSnippet} ({tradesperson.distance})</p>
+        <p className={`availability ${tradesperson.availability.toLowerCase().replace(/\s+/g, '-')}`}>
+          {tradesperson.availability}
+          {tradesperson.eta && <span className="eta"> ({tradesperson.eta})</span>}
+        </p>
+        {tradesperson.aiMatchScore && (
+          <div className="ai-match-info">
+            <span className="ai-badge">SkillCo AI Match: {tradesperson.aiMatchScore}</span>
+            <p className="ai-reason">{tradesperson.aiMatchReason}</p>
+          </div>
+        )}
+        <p className="skills-snippet">Skills include: {tradesperson.skills.slice(0, 2).join(', ')}...</p>
+        <p className="vetting-status"><em>{tradesperson.vettingStatus}</em></p>
+      </div>
+      <div className="card-footer">
+        <button
+          className="view-profile-button"
+          // onClick={viewProfile} // Enable later
+        >
+          View Profile & Quote
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default TradespersonCard;
