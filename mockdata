@@ -1,0 +1,52 @@
+// src/data/mockTradespeopleData.js
+export const mockTradespeople = [
+  {
+    id: '1',
+    name: 'Leicester Plumbing Pros',
+    trade: 'Plumber',
+    locationSnippet: 'Central Leicester (LE1)', // For display
+    distance: '0.8 miles away',
+    availability: 'Available NOW',
+    eta: 'Est. Arrival: 15 mins', // Uber-like illustrative text
+    rating: 4.9,
+    reviewCount: 120,
+    skills: ['Emergency Leaks', 'Boiler Repair', 'Tap Replacement'],
+    aiMatchScore: '95%',
+    aiMatchReason: '✓ Top Skill Match ✓ Highly Rated ✓ Nearby & Available NOW',
+    profileImage: 'https://via.placeholder.com/150/007bff/FFFFFF?Text=LPP', // Placeholder image
+    vettingStatus: 'SkillCo AI Verified: Gas Safe (Keywords Confirmed)',
+  },
+  {
+    id: '2',
+    name: 'Sparky Solutions Leicester',
+    trade: 'Electrician',
+    locationSnippet: 'Knighton (LE2)',
+    distance: '2.1 miles away',
+    availability: 'Available this afternoon',
+    eta: 'Est. Arrival: 45 mins',
+    rating: 4.7,
+    reviewCount: 85,
+    skills: ['Rewiring', 'Fault Finding', 'Lighting Installation'],
+    aiMatchScore: '90%',
+    aiMatchReason: '✓ Skill Match ✓ Good Availability ✓ Nearby',
+    profileImage: 'https://via.placeholder.com/150/28a745/FFFFFF?Text=SSL',
+    vettingStatus: 'SkillCo AI Verified: NICEIC (Keywords Confirmed), PLI Valid',
+  },
+  {
+    id: '3',
+    name: 'Handy Hal',
+    trade: 'Handyman',
+    locationSnippet: 'Braunstone (LE3)',
+    distance: '3.5 miles away',
+    availability: 'Taking bookings for tomorrow',
+    eta: null, // Not immediately available
+    rating: 4.5,
+    reviewCount: 60,
+    skills: ['Flat Pack Assembly', 'Painting', 'Shelf Mounting'],
+    aiMatchScore: '82%',
+    aiMatchReason: '✓ Relevant Skills ✓ Good Reviews',
+    profileImage: 'https://via.placeholder.com/150/ffc107/000000?Text=HH',
+    vettingStatus: 'Vetting: Basic Checks Complete (Prototype)',
+  },
+  // Add 2-3 more diverse sample tradespeople for Leicester
+];

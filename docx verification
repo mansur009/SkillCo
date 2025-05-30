@@ -1,0 +1,7 @@
+from PIL import Image
+import pytesseract
+
+cert_image = Image.open("cert.png")
+text = pytesseract.image_to_string(cert_image)
+if "valid" in text.lower():
+    return "Valid Certification"

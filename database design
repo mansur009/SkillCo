@@ -1,0 +1,39 @@
+// Users Collection
+{
+  _id: ObjectId,
+  name: String,
+  email: String,
+  password: String,
+  role: "user" | "worker",
+  location: {
+    type: { type: String, default: "Point" },
+    coordinates: [Number] // [longitude, latitude]
+  },
+  createdAt: Date
+}
+
+// Workers Collection
+{
+  _id: ObjectId,
+  userId: ObjectId,
+  skills: [String], // ["plumber", "electrician"]
+  certifications: [String],
+  rating: Number,
+  profileImage: String,
+  bio: String,
+  availability: Boolean
+}
+
+// Jobs Collection
+{
+  _id: ObjectId,
+  userId: ObjectId,
+  workerId: ObjectId,
+  description: String,
+  location: {
+    type: { type: String, default: "Point" },
+    coordinates: [Number]
+  },
+  status: "pending" | "assigned" | "in-progress" | "completed",
+  createdAt: Date
+}

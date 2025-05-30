@@ -1,0 +1,44 @@
+import axios from 'axios';
+import { useState } from 'react';
+
+export default function JobForm() {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState('plumbing');
+  const [location, setLocation] = useState('');
+  const [preferredTime, setPreferredTime] = useState('');
+  const [media, setMedia] = useState([]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('category', category);
+    formData.append('location', location);
+    formData.append('preferredTime', preferredTime);
+    media.forEach(file => formData.append('media', file));
+
+    const token = localStorage.getItem('token');
+    const res = await axios.post('/api/jobs', formData, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    alert('Job posted!');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input placeholder="Job Title" value={title} onChange={(e) => setTitle(e.target.value)} />
+      <textarea placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} />
+      <select value={category} onChange={(e) => setCategory(e.target.value)}>
+        <option value="plumbing">Plumbing</option>
+        <option value="electrical">Electrical</option>
+        <option value="roofing">Roofing</option>
+      </select>
+      <input placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} />
+      <input type="datetime-local" value={preferredTime} onChange={(e) => setPreferredTime(e.target.value)} />
+      <input type="file" multiple onChange={(e) => setMedia([...e.target.files])} />
+      <button type="submit">Post Job</button>
+    </form>
+  );
+}

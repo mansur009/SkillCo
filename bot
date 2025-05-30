@@ -1,0 +1,8 @@
+// Chatbot API (Node.js)
+app.post('/chatbot', async (req, res) => {
+    const response = await openai.createCompletion({
+        model: "gpt-3.5-turbo-instruct",
+        prompt: req.body.message
+    });
+    res.json({ reply: response.data.choices[0].text });
+});

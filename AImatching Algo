@@ -1,0 +1,8 @@
+# Sample AI Matching (Python - FastAPI)
+@app.post("/match")
+def match_worker(job_description: str):
+    # Use NLP to extract skills from job description
+    matched_workers = db.workers.find({
+        "skills": {"$in": extracted_skills}
+    })
+    return list(matched_workers)

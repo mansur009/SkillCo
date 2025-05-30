@@ -1,0 +1,33 @@
+import axios from 'axios';
+import { useState } from 'react';
+
+export default function Auth({ isLogin }) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState('homeowner');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
+    const body = isLogin ? { email, password } : { name, email, password, role };
+    const res = await axios.post(endpoint, body);
+    localStorage.setItem('token', res.data.token);
+    alert(isLogin ? 'Logged in!' : 'Registered!');
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      {!isLogin && <input placeholder="Name" value={name} onChange={(e) => setName(e.target.value)} />}
+      <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+      <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      {!isLogin && (
+        <select value={role} onChange={(e) => setRole(e.target.value)}>
+          <option value="homeowner">Homeowner</option>
+          <option value="tradesperson">Tradesperson</option>
+        </select>
+      )}
+      <button type="submit">{isLogin ? 'Login' : 'Register'}</button>
+    </form>
+  );
+}

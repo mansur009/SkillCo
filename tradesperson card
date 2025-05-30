@@ -1,0 +1,30 @@
+// src/components/TradespersonCard.js
+import React from 'react';
+import './TradespersonCard.css';
+import { useNavigate } from 'react-router-dom'; // Import
+
+// ... (StarRating component remains the same)
+
+function TradespersonCard({ tradesperson }) {
+  const navigate = useNavigate(); // Initialize navigate
+
+  const viewProfile = () => {
+    navigate(`/tradesperson/${tradesperson.id}`); // Navigate to dynamic profile page
+  };
+
+  return (
+    <div className="tradesperson-card">
+      {/* ... other card content ... */}
+      <div className="card-footer">
+        <button
+          className="view-profile-button"
+          onClick={viewProfile} // Use the handler
+        >
+          View Profile & Quote
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default TradespersonCard;

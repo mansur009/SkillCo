@@ -1,0 +1,9 @@
+# Example test question
+question = "What should you do if a pipe starts leaking?"
+options = ["A. Ignore it", "B. Turn off water supply", ...]
+
+# Evaluate answer using ML model
+if model.predict(user_answer) == correct_answer:
+    return "Verified"
+else:
+    return "Needs Retest"
